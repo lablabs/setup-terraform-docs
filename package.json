@@ -1,0 +1,37 @@
+{
+  "name": "setup-terraform-docs-action",
+  "version": "0.1.0",
+  "description": "Install and setup Terraform docs executable Action",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "prepare": "ncc build index.js -o dist -m --no-source-map-register",
+    "test": "jest",
+    "all": "npm run lint && npm run prepare && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lablabs/setup-terraform-docs-action.git"
+  },
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "Terraform",
+    "Terraform docs"
+  ],
+  "author": "Labyrinth Labs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lablabs/setup-terraform-docs-action/issues"
+  },
+  "homepage": "https://github.com/lablabs/setup-terraform-docs-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/tool-cache": "^1.0.1"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.22.3",
+    "eslint": "^7.4.0",
+    "jest": "^26.1.0"
+  }
+}
