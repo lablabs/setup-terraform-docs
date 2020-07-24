@@ -8,6 +8,7 @@ inputs:
   terraform_docs_version:
     description: Terraform docs version to install
     required: true
+    default: latest
 branding:
   icon: play-circle
   color: blue
