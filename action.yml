@@ -9,6 +9,9 @@ inputs:
     description: Terraform docs version to install
     required: true
     default: latest
+  token:
+    description: GitHub token
+    required: false
 branding:
   icon: play-circle
   color: blue
