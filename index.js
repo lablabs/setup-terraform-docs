@@ -9,7 +9,7 @@ const { Octokit } = require('@octokit/rest')
 
 async function run() {
   if (isSupportedPlatform(process.platform)) {
-    const version = getTerraformDocsVersion()
+    const version = await getTerraformDocsVersion()
     const url = getDownloadUrl(version, process.platform)
 
     const targetPath = getTargetPath()
@@ -57,18 +57,17 @@ function getOctokit() {
   return new Octokit(options)
 }
 
-function getTerraformDocsVersion() {
+async function getTerraformDocsVersion() {
   const inputVersion = core.getInput("terraform_docs_version", {required: true})
   if (inputVersion == "latest") {
     core.debug("Requesting for [latest] version ...")
     const octokit = getOctokit()
-    return octokit.repos.getLatestRelease({
+    const response = await octokit.repos.getLatestRelease({
       owner: 'terraform-docs',
       repo: 'terraform-docs'
-    }).then((response) => {
-      core.debug(`... version resolved to [${response.data.name}`)
-      return response.data.name
     })
+    core.debug(`... version resolved to [${response.data.name}`)
+    return response.data.name
   } else {
     return inputVersion
   }
