@@ -82,8 +82,8 @@ function getDownloadUrl(version, platform) {
 function getDownloadFilename(version, platform) {
   const fileNamePlatformMatrix = {
     win32: 'windows-amd64.exe',
-    darwin: 'darwin-amd64',
-    linux: 'linux-amd64'
+    darwin: 'darwin-amd64.tar.gz',
+    linux: 'linux-amd64.tar.gz'
   }
   return `terraform-docs-${version}-${fileNamePlatformMatrix[platform]}`
 }
