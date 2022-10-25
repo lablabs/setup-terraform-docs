@@ -2,7 +2,7 @@ name: 'Setup Terraform docs'
 description: 'Install and setup Terraform docs executable'
 author: 'Labyrinth Labs'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 inputs:
   terraform_docs_version:
