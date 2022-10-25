@@ -10,11 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
       - run: npm ci
       - run: npm run all
+
+      - uses: actions/setup-python@v4
       - run: pip install markdown-to-presentation
       - run: markdown-to-presentation push --pages-branch release README.md LICENSE action.yml dist/index.js
         env:

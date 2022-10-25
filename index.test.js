@@ -1,32 +1,72 @@
-const core = require('@actions/core')
-const tc = require('@actions/tool-cache')
+const os = require("os");
 
-const fs = require('fs')
+const core = require("@actions/core");
+const io = require("@actions/io");
+const tc = require("@actions/tool-cache");
 
-const index = require('./index')
+const index = require("./index");
 
-jest.mock('@actions/core')
-jest.mock('@actions/tool-cache')
-fs.chmodSync = jest.fn()
+jest.mock("@actions/core");
+jest.mock("@actions/tool-cache");
+jest.mock("os");
 
-tc.downloadTool.mockResolvedValue("terraform-docs")
-fs.chmodSync.mockReturnValue(null)
+describe("Mock tests", () => {
+  const HOME = process.env.HOME;
+  const APPDATA = process.env.APPDATA;
 
-describe('Mock tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    process.env.HOME = "/tmp/asdf";
+    process.env.APPDATA = "/tmp/asdf";
+    jest.clearAllMocks();
+  });
 
-  test('download should be called', async () => {
-    await index.run()
+  afterEach(async () => {
+    await io.rmRF(process.env.HOME);
+    process.env.HOME = HOME;
+    process.env.APPDATA = APPDATA;
+  });
 
-    expect(tc.downloadTool).toBeCalledTimes(1)
-  })
+  test("gets specified version on linux amd64", async () => {
+    const version = "v0.16.0";
 
-  test('add path should be called', async () => {
-    await index.run()
+    core.getInput = jest.fn().mockReturnValueOnce(version);
 
-    expect(core.addPath).toBeCalledTimes(1)
-  })
-})
+    tc.downloadTool = jest.fn().mockReturnValueOnce("file.tar.gz");
 
+    tc.extractTar = jest.fn().mockReturnValueOnce("file");
+
+    os.platform = jest.fn().mockReturnValue("linux");
+
+    os.arch = jest.fn().mockReturnValue("amd64");
+
+    await index.run();
+
+    expect(tc.downloadTool.mock.calls[0][0]).toBe(
+      "https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz"
+    );
+    expect(tc.downloadTool).toBeCalledTimes(1);
+    expect(core.addPath).toBeCalledTimes(1);
+  });
+
+  test("gets specified version on windows 386", async () => {
+    const version = "v0.16.0";
+
+    core.getInput = jest.fn().mockReturnValueOnce(version);
+
+    tc.downloadTool = jest.fn().mockReturnValueOnce("file.zip");
+
+    tc.extractZip = jest.fn().mockReturnValueOnce("file");
+
+    os.platform = jest.fn().mockReturnValue("win32");
+
+    os.arch = jest.fn().mockReturnValue("386");
+
+    await index.run();
+
+    expect(tc.downloadTool.mock.calls[0][0]).toBe(
+      "https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-windows-386.exe"
+    );
+    expect(tc.downloadTool).toBeCalledTimes(1);
+    expect(core.addPath).toBeCalledTimes(1);
+  });
+});
