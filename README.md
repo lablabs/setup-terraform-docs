@@ -1,3 +1,7 @@
+# ⛔️ DEPRECATED
+
+This is no longer supported, please consider using [install-gh-release](https://github.com/marketplace/actions/install-a-binary-from-github-releases) instead.
+
 # Setup Terraform docs Action
 
 A GitHub action that installs a [Terraform docs](https://github.com/terraform-docs/terraform-docs) executable in the PATH.
